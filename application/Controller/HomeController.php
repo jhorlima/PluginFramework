@@ -13,7 +13,14 @@ class HomeController extends BaseController {
         $this->getAssets()->setJs('js/teste.js');
 
         if( $this->getRequest()->isGet()){
-            $this->setView('HomeView', ['dados' => $this->getRequest()->getGetData()]);
+            $this->setView('HomeView', [
+                'dados' => $this->getRequest()->requestGet('http://gpu/gpu/local', [
+                    'headers' => [
+                        'app-token' => 'coordenadoriaplanejamentofisico',
+                        'app-name'  => 'cpf',
+                    ]
+                ])['body']
+            ]);
         }
     }
 }

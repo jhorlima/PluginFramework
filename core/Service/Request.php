@@ -115,4 +115,31 @@ class Request {
     private function isJSON($string){
         return is_string($string) && is_object(json_decode($string)) ? true : false;
     }
+
+    public function requestGet($url, array $args = []){
+        if(count($args))
+            $response = wp_remote_get($url, $args);
+        else
+            $response = wp_remote_get($url);
+
+        if(is_array($response))
+            return $response;
+        else
+            throw new \Exception("Ocorreu um erro ao realizar o GET");
+    }
+
+    public function requestPost($url, array $body, array $args = []){
+        if(count($args)){
+            $args['body'] = $body;
+            $response = wp_remote_post($url, $args);
+        } else {
+            $args = ['body' => $body];
+            $response = wp_remote_post($url, $args);
+        }
+
+        if(is_array($response))
+            return $response;
+        else
+            throw new \Exception("Ocorreu um erro ao realizar o POST");
+    }
 }
