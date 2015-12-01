@@ -78,7 +78,7 @@ try {
             $listPath->urlHome = URL_HOME;
 
             if(!($controller instanceof BaseController))
-                Log::register(PATH_PLUGIN, "{$controllerName} Invalido!");
+                throw new InvalidArgumentException("{$controllerName} Invalido!");
 
             $controller->setViewPath($controllerName, PATH_PLUGIN);
 
@@ -116,20 +116,16 @@ try {
             $controllerName = "\\Application\\Controller\\{$controller}Controller";
 
             return function() use (&$processAction, &$controllerName, &$controller, &$action) {
-                $controllerObject = new $controllerName();
-                $processAction($controllerObject, $controller, $action);
+                $processAction(new $controllerName(), $controller, $action);
             };
         };
 
-        if (isset($menu) && is_array($menu)) {
-            $subMenu = isset($subMenu) ? $subMenu: [];
-            Initialize::setMenu($menu, $subMenu, $processController);
-        }
+        if (isset($menu) && is_array($menu))
+            Initialize::setMenu($menu, isset($subMenu) ? $subMenu: [], $processController);
 
-        if (isset($actions) && is_array($actions)) {
+        if (isset($actions) && is_array($actions))
             foreach($actions as $action)
                 Initialize::setActions($action, $processController);
-        }
     });
 
     if (isset($activation) && is_callable($activation))

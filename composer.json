@@ -1,6 +1,6 @@
 {
   "name": "PluginFramework",
-  "description": "Um framework para plguin wordpress",
+  "description": "Um framework para plugin wordpress",
   "license": "GPLv2",
   "authors": [
     {
@@ -11,8 +11,7 @@
   "autoload": {
     "psr-4": {
       "Application\\" : "application",
-      "Core\\" : "core",
-      "Other\\" : "log"
+      "Core\\" : "core"
     }
   }
 }

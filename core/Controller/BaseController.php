@@ -1,7 +1,6 @@
 <?php
 namespace Core\Controller;
 
-use Core\Service\Log;
 use Core\Service\Request;
 use \Core\Service\Assets;
 
@@ -86,10 +85,10 @@ abstract class BaseController {
 
 	protected function setView($view, array $argument = []) {
 		if(!is_string($view))
-            Log::register($this->wpPath->pathPlugin, "O primeiro parametro de \"viewCompiller\" precisa ser uma string!");
+            throw new \InvalidArgumentException("O primeiro parametro de \"viewCompiller\" precisa ser uma string!");
 
 		if (!file_exists("{$this->viewPath}/{$view}.php"))
-            Log::register($this->wpPath->pathPlugin, "A view \"{$view}.php\" não foi encontrada!");
+            throw new \InvalidArgumentException("A view \"{$view}.php\" não foi encontrada!");
 
 		$this->view = "{$this->viewPath}/{$view}.php";
         $this->viewArguments = $argument;
