@@ -21,7 +21,7 @@ class Initialize {
 				'manage_options',
 				$menu[ 'slug' ],
 				$method($menu[ 'Controller' ], isset($menu[ 'action' ]) ? $menu[ 'action' ] : 'Index'),
-				plugins_url($menu[ 'icon' ]), 6
+				$menu[ 'icon' ], 6
 			);
 
 			foreach ($subMenus as $subMenu) {
