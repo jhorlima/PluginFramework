@@ -15,6 +15,5 @@ class HomeController extends BaseController {
         if( $this->getRequest()->isGet()){
             $this->setView('HomeView', ['dados' => $this->getRequest()->getGetData()]);
         }
-
     }
 }

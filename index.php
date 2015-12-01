@@ -62,7 +62,7 @@ try {
         if (isset($wp_footer) && is_callable($wp_footer))
             add_action('wp_footer', $wp_footer);
 
-        $processAction = function (BaseController $controller, $controllerName) {
+        $processAction = function (BaseController $controller, $controllerName, $action) {
 
             $request = new Request();
 
@@ -93,6 +93,9 @@ try {
             if(isset($request->getGetData()['action']) && method_exists($controller, "{$request->getGetData()['action']}Action"))
                 $controller->{"{$request->getGetData()['action']}Action"}();
 
+            elseif(method_exists($controller, "{$action}Action"))
+                $controller->{"{$action}Action"}();
+
             else
                 $controller->{"IndexAction"}();
 
@@ -108,13 +111,13 @@ try {
                 Initialize::showView($controller, PATH_PLUGIN);
         };
 
-        $processController = function ($controller) use ($processAction) {
+        $processController = function ($controller, $action = 'Index') use ($processAction) {
 
             $controllerName = "\\Application\\Controller\\{$controller}Controller";
 
-            return function() use (&$processAction, &$controllerName, &$controller) {
+            return function() use (&$processAction, &$controllerName, &$controller, &$action) {
                 $controllerObject = new $controllerName();
-                $processAction($controllerObject, $controller);
+                $processAction($controllerObject, $controller, $action);
             };
         };
 

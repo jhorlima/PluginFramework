@@ -8,6 +8,7 @@ $menu = [
     'icon' => '',
     'ajax' => true,
     'post' => true,
+    'login' => true
 ];
 
 //Submenu administrador Configurações
@@ -19,7 +20,7 @@ $subMenu = [
         'Controller' => 'Home',
         'hidden' => false,
         'ajax' => true,
-        'login' => false,
+        'login' => true,
         'post' => true,
     ],
     [
@@ -39,7 +40,8 @@ $actions = [
     [
         'name' => 'Ínicio',
         'slug' => 'bla',
-        'Controller' => 'Teste',
+        'Controller' => 'Home',
+        'shortCode' => 'blabla'
     ],
 ];
 

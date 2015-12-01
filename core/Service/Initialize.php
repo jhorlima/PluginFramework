@@ -20,7 +20,7 @@ class Initialize {
 				$menu[ 'title' ],
 				'manage_options',
 				$menu[ 'slug' ],
-				$method($menu[ 'Controller' ]),
+				$method($menu[ 'Controller' ], isset($menu[ 'action' ]) ? $menu[ 'action' ] : 'Index'),
 				plugins_url($menu[ 'icon' ]), 6
 			);
 
@@ -31,7 +31,7 @@ class Initialize {
 						$subMenu['title'],
 						'manage_options',
 						$subMenu['slug'],
-						$method($subMenu[ 'Controller' ])
+						$method($subMenu[ 'Controller' ], isset($subMenu[ 'action' ]) ? $subMenu[ 'action' ] : 'Index')
 				);
 			}
 		});
@@ -57,7 +57,14 @@ class Initialize {
 	public static function setActions(array $action, &$method){
 		self::loadRequest();
 		if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action[ 'slug' ])
-			add_action('init', $method($action[ 'Controller' ]));
+			add_action('init', $method($action[ 'Controller' ], isset($action[ 'action' ]) ? $action[ 'action' ] : 'Index'));
+
+        if(isset($action['shortCode']) && is_string($action['shortCode']))
+            self::setShortCode($action, $method);
+	}
+
+	public static function setShortCode(array $action, &$method){
+        add_shortcode($action['shortCode'], $method($action[ 'Controller' ], isset($action[ 'action' ]) ? $action[ 'action' ] : 'Index'));
 	}
 
     public static function setActionsAjax(array $action, &$method){
