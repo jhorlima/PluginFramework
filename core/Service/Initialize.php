@@ -103,10 +103,14 @@ class Initialize {
 	}
 
     public static function processAssets($assets){
-        foreach($assets->getCss() as $css)
-            echo "<link rel='stylesheet' type='text/css' href='{$css}'>".PHP_EOL;
+        add_action('wp_head_plugin', function() use ($assets) {
+            foreach ($assets->getCss() as $css)
+                echo "<link rel='stylesheet' type='text/css' href='{$css}'>" . PHP_EOL;
+        });
 
-        foreach($assets->getJs() as $js)
-            echo "<script type='text/javascript' src='{$js}'></script>".PHP_EOL;
+        add_action('wp_footer_plugin', function() use ($assets) {
+            foreach ($assets->getJs() as $js)
+                echo "<script type='text/javascript' src='{$js}'></script>" . PHP_EOL;
+        });
     }
 }
