@@ -99,6 +99,8 @@ try {
             else
                 $controller->{"indexAction"}();
 
+            $controller->init();
+
             foreach($controller->getBeforeEvent() as &$beforeEvent)
                 $beforeEvent();
 

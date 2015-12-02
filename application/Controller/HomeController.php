@@ -10,7 +10,6 @@ class HomeController extends BaseController {
     }
 
     public function indexAction() {
-        $this->getAssets()->setJs('js/teste.js');
 
         if( $this->getRequest()->isGet()){
             $this->setView('HomeView', [
@@ -22,5 +21,10 @@ class HomeController extends BaseController {
                 ])['body']
             ]);
         }
+    }
+
+    public function init()
+    {
+        $this->getAssets()->setJs('js/teste.js');
     }
 }

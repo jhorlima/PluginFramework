@@ -141,4 +141,6 @@ abstract class BaseController {
     }
 
 	abstract public function indexAction();
+
+    abstract public function init();
 }
