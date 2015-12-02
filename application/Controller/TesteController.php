@@ -14,4 +14,9 @@ class TesteController extends BaseController {
 
         $this->viewJson(['teste']);
     }
+
+    public function init()
+    {
+        // TODO: Implement init() method.
+    }
 }

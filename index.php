@@ -90,6 +90,8 @@ try {
 
             $controller->setRequest($request);
 
+            $controller->init();
+
             if(isset($request->getGetData()['action']) && method_exists($controller, "{$request->getGetData()['action']}Action"))
                 $controller->{"{$request->getGetData()['action']}Action"}();
 
@@ -98,8 +100,6 @@ try {
 
             else
                 $controller->{"indexAction"}();
-
-            $controller->init();
 
             foreach($controller->getBeforeEvent() as &$beforeEvent)
                 $beforeEvent();
