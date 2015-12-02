@@ -97,7 +97,7 @@ try {
                 $controller->{"{$action}Action"}();
 
             else
-                $controller->{"IndexAction"}();
+                $controller->{"indexAction"}();
 
             foreach($controller->getBeforeEvent() as &$beforeEvent)
                 $beforeEvent();
@@ -111,7 +111,7 @@ try {
                 Initialize::showView($controller, PATH_PLUGIN);
         };
 
-        $processController = function ($controller, $action = 'Index') use ($processAction) {
+        $processController = function ($controller, $action = 'index') use ($processAction) {
 
             $controllerName = "\\Application\\Controller\\{$controller}Controller";
 
