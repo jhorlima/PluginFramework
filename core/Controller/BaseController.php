@@ -17,6 +17,11 @@ abstract class BaseController {
     private $beforeEvent;
     private $afterEvent;
 
+    public final function __construct()
+    {
+        //Construct
+    }
+
     public function getRequest()
     {
         return $this->request;
