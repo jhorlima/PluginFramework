@@ -54,7 +54,7 @@ class Initialize {
         }
 	}
 
-	public static function setActions(array $action, &$method){
+	public static function setActions(array $action, $method){
 		self::loadRequest();
 		if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action[ 'slug' ])
 			add_action('init', $method($action[ 'Controller' ], isset($action[ 'action' ]) ? $action[ 'action' ] : 'index'));
