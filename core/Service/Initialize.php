@@ -10,7 +10,7 @@ class Initialize {
 			self::$request = new Request();
 	}
 
-	public static function setMenu(array $menu, array $subMenus = [], $method){
+	public static function setMenu(array $menu, array $subMenus = [], &$method){
 
 		self::loadRequest();
 
@@ -20,7 +20,7 @@ class Initialize {
 				$menu[ 'title' ],
 				'manage_options',
 				$menu[ 'slug' ],
-				$method($menu[ 'Controller' ], isset($menu[ 'action' ]) ? $menu[ 'action' ] : 'index'),
+				$method($menu[ 'Controller' ], isset($menu[ 'action' ]) ? $menu[ 'action' ] : null),
 				$menu[ 'icon' ], 6
 			);
 
@@ -31,7 +31,7 @@ class Initialize {
 						$subMenu['title'],
 						'manage_options',
 						$subMenu['slug'],
-						$method($subMenu[ 'Controller' ], isset($subMenu[ 'action' ]) ? $subMenu[ 'action' ] : 'index')
+						$method($subMenu[ 'Controller' ], isset($subMenu[ 'action' ]) ? $subMenu[ 'action' ] : null)
 				);
 			}
 		});
@@ -54,29 +54,29 @@ class Initialize {
         }
 	}
 
-	public static function setActions(array $action, $method){
+	public static function setActions(array $action, &$method){
 		self::loadRequest();
 		if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action[ 'slug' ])
-			add_action('init', $method($action[ 'Controller' ], isset($action[ 'action' ]) ? $action[ 'action' ] : 'index'));
+			add_action('init', $method($action['Controller'], isset($action['action']) ? $action['action'] : null, true));
 
         if(isset($action['shortCode']) && is_string($action['shortCode']))
             self::setShortCode($action, $method);
 	}
 
 	public static function setShortCode(array $action, &$method){
-        add_shortcode($action['shortCode'], $method($action[ 'Controller' ], isset($action[ 'action' ]) ? $action[ 'action' ] : 'index'));
+        add_shortcode($action['shortCode'], $method($action['Controller'], isset($action['action']) ? $action['action'] : null));
 	}
 
     public static function setActionsAjax(array $action, &$method){
         self::loadRequest();
-        if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action[ 'slug' ])
-            add_action("wp_ajax_{$action[ 'slug' ]}", $method($action[ 'Controller' ]));
+        if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action['slug'])
+            add_action("wp_ajax_{$action['slug']}", $method($action['Controller'], isset($action['action']) ? $action['action'] : null));
     }
 
     public static function setActionsPost(array $action, &$method){
         self::loadRequest();
-        if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action[ 'slug' ])
-            add_action("admin_post_{$action[ 'slug' ]}", $method($action[ 'Controller' ]));
+        if(isset(self::$request->getGetData()['page']) && self::$request->getGetData()['page'] == $action['slug'])
+            add_action("admin_post_{$action['slug']}", $method($action['Controller'], isset($action['action']) ? $action['action'] : null));
     }
 
 	public static function showView($controller, $path = "./"){

@@ -62,7 +62,7 @@ try {
         if (isset($wp_footer) && is_callable($wp_footer))
             add_action('wp_footer', $wp_footer);
 
-        $processAction = function (BaseController $controller, $controllerName, $action) {
+        $processAction = function (BaseController $controller, $controllerName, $action, $isAction) {
 
             $request = new Request();
 
@@ -92,11 +92,11 @@ try {
 
             $controller->init();
 
-            if(isset($request->getGetData()['action']) && method_exists($controller, "{$request->getGetData()['action']}Action"))
-                $controller->{"{$request->getGetData()['action']}Action"}();
-
-            elseif(method_exists($controller, "{$action}Action"))
+            if(!is_null($action) && method_exists($controller, "{$action}Action"))
                 $controller->{"{$action}Action"}();
+
+            elseif(isset($request->getGetData()['action']) && method_exists($controller, "{$request->getGetData()['action']}Action"))
+                $controller->{"{$request->getGetData()['action']}Action"}();
 
             else
                 $controller->{"indexAction"}();
@@ -109,16 +109,16 @@ try {
             foreach($controller->getAfterEvent() as &$afterEvent)
                 $afterEvent();
 
-            if ($controller->getViewType() !== "NO_VIEW")
+            if (($controller->getViewType() !== "NO_VIEW" && !$isAction) || ($controller->getViewType() === "JSON" && $isAction))
                 Initialize::showView($controller, PATH_PLUGIN);
         };
 
-        $processController = function ($controller, $action = 'index') use ($processAction) {
+        $processController = function ($controller, $action, $isAction = false ) use ($processAction) {
 
             $controllerName = "\\Application\\Controller\\{$controller}Controller";
 
-            return function() use (&$processAction, &$controllerName, &$controller, &$action) {
-                $processAction(new $controllerName(), $controller, $action);
+            return function() use (&$processAction, &$controllerName, &$controller, &$action, &$isAction) {
+                $processAction(new $controllerName(), $controller, $action, $isAction);
             };
         };
 
